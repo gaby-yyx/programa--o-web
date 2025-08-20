@@ -1,0 +1,60 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: url(https://wallpapers.com/images/hd/cool-blue-galaxy-ymyugwustd02tdgl.jpg);
+    padding: 20px;
+}
+h1, h2{
+    text-align: center;
+    color: #ca0000;
+    margin-bottom: 20px;
+}
+.container{
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgb(185, 44, 68);
+}
+.exemplo{
+    padding: 10px;
+    border: 1px solid #5f0000;
+    text-align: center;
+    color: #555;
+    background-image: url(https://static.vecteezy.com/system/resources/thumbnails/002/513/393/original/space-flight-to-mysterious-red-nebula-free-video.jpg);
+}
+.exemplo:hover{
+    padding: 10px;
+    border: 1px solid #5f0000;
+    text-align: center;
+    color: #555;
+    background-image: url(https://static.vecteezy.com/system/resources/thumbnails/002/513/393/original/space-flight-to-mysterious-red-nebula-free-video.jpg);}
+.block{
+    display: block;
+    width: 80%;
+    margin: 5px auto;
+
+}
+.inline{
+    display: inline;
+    margin: 5px;
+    width: 500px;
+    height: 500px;
+}
+.inline-block{
+    display: inline-block;
+    width: 200px;
+    height: 100px;
+    margin: 5px;
+}
+img{
+    display: block;
+    margin: auto;
+    width: 20px;
+    height: 20px
+    ;
+}

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honda - Modelos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e31a1a; /* Vermelho Honda */
+            --secondary-color: #1a1a1a; /* Preto */
+            --background-color: #0d0d0d;
+            --text-color: #ffffff;
+            --light-grey: #cccccc;
+            --border-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Animações --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px var(--primary-color); }
+            50% { box-shadow: 0 0 20px var(--primary-color); }
+            100% { box-shadow: 0 0 5px var(--primary-color); }
+        }
+        
+        @keyframes lineGrow {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* --- Header --- */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(13, 13, 13, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeInDown 1s ease-in-out;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .honda-logo {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(227, 26, 26, 0.8);
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        .main-menu, .user-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .main-menu a, .user-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .main-menu a:hover, .user-menu a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            text-shadow: 0 0 8px rgba(227, 26, 26, 0.8);
+        }
+
+        .main-menu a::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -5px;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .main-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* --- Seção de Modelos --- */
+        #models-section {
+            padding: 120px 5% 80px;
+            text-align: center;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        #models-section h2 {
+            font-size: 3em;
+            margin-bottom: 50px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(227, 26, 26, 0.5);
+        }
+        
+        .car-model-container {
+            margin-bottom: 80px;
+        }
+        
+        .car-model-container h3 {
+            font-size: 2.5em;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .car-model-container p {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1em;
+            color: var(--light-grey);
+        }
+
+        /* --- Carrossel --- */
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .carousel-slides img {
+            width: 100%;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.5em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .prev { left: 0; border-radius: 0 10px 10px 0; }
+        .next { right: 0; border-radius: 10px 0 0 10px; }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            background-color: var(--light-grey);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* --- Footer --- */
+        footer {
+            width: 100%;
+            padding: 20px 5%;
+            text-align: center;
+            color: var(--light-grey);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9em;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-container">
+        <nav>
+            <ul class="main-menu">
+                <li><a href="modelos.html">Modelos</a></li>
+                <li><a href="#">Serviços</a></li>
+                <li><a href="#">Financiamento</a></li>
+            </ul>
+        </nav>
+        <div class="honda-logo">HONDA</div>
+        <nav>
+            <ul class="user-menu">
+                <li><a href="#">Buscar</a></li>
+                <li><a href="#" id="login-link">Entrar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="models-section">
+        <h2>Nossa Linha Completa</h2>
+        
+        <div class="car-model-container">
+            <h3>Honda Civic Sedan</h3>
+            <p>Elegância e performance se unem em um design sofisticado. O Civic oferece tecnologia de ponta, segurança e uma experiência de condução inigualável.</p>
+            <div class="carousel" id="carousel-civic">
+                <div class="carousel-slides">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjj9PBkk7TyLBpN7ZRN4PjWEvBUfKBxZi8OC9UUAGyruEgxKrEciD7Ig64QiRHYEuvzZM_G_uog69V4UwmB0mOPrrbHh-0bJ2s2Ichl4dGzojoA08TLpAjcilg7ybzg6cyvLffvkGxJ-69KFULWJKvav1Cd5yFewZFlCCiKPhEW7LBhioVD-QXxgRmGlfw/w640-h366/20231209_170103.jpg" alt="Honda Civic 1">
+                    <img src="https://i.ibb.co/tCg9460/honda-civic-branco.png" alt="Honda Civic 2">
+                    <img src="https://i.ibb.co/VqC3fNq/honda-civic-vermelho.png" alt="Honda Civic 3">
+                </div>
+                <button class="carousel-button prev">&lt;</button>
+                <button class="carousel-button next">&gt;</button>
+                <div class="carousel-dots"></div>
+            </div>
+        </div>
+
+        <div class="car-model-container">
+            <h3>Honda HR-V</h3>
+            <p>Um SUV versátil e moderno, projetado para a cidade. O HR-V combina espaço interno flexível, conectividade avançada e um visual arrojado que se destaca.</p>
+            <div class="carousel" id="carousel-hrv">
+                <div class="carousel-slides">
+                    <img src="https://i.ibb.co/YyY1q63/honda-hrv-preto.png" alt="Honda HR-V 1">
+                    <img src="https://i.ibb.co/3s3XfJ9/honda-hrv-cinza.png" alt="Honda HR-V 2">
+                    <img src="https://i.ibb.co/4sM804c/honda-hrv-prata.png" alt="Honda HR-V 3">
+                </div>
+                <button class="carousel-button prev">&lt;</button>
+                <button class="carousel-button next">&gt;</button>
+                <div class="carousel-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Honda Concessionária. Todos os direitos reservados. Design por DevPro.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica para os Carrosséis (Função reutilizável)
+            function setupCarousel(carouselId) {
+                const carousel = document.getElementById(carouselId);
+                const slides = carousel.querySelector('.carousel-slides');
+                const prevButton = carousel.querySelector('.prev');
+                const nextButton = carousel.querySelector('.next');
+                const dotsContainer = carousel.querySelector('.carousel-dots');
+                const images = slides.querySelectorAll('img');
+                const totalSlides = images.length;
+                let currentIndex = 0;
+
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    dotsContainer.appendChild(dot);
+                    dot.addEventListener('click', () => goToSlide(i));
+                }
+                const dots = dotsContainer.querySelectorAll('.dot');
+
+                function updateCarousel() {
+                    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    dots[currentIndex].classList.add('active');
+                }
+
+                function goToSlide(index) {
+                    currentIndex = index;
+                    updateCarousel();
+                }
+
+                prevButton.addEventListener('click', () => {
+                    currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalSlides - 1;
+                    updateCarousel();
+                });
+
+                nextButton.addEventListener('click', () => {
+                    currentIndex = (currentIndex < totalSlides - 1) ? currentIndex + 1 : 0;
+                    updateCarousel();
+                });
+
+                updateCarousel();
+            }
+
+            setupCarousel('carousel-civic');
+            setupCarousel('carousel-hrv');
+
+        });
+    </script>
+</body>
+</html>

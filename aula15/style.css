@@ -1,0 +1,66 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: Helvetica;
+    padding: 20px;
+    background-color: #9c0000;
+}
+h1{
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+#menu{
+    border: solid 3px red;
+    height: 80px;
+    background-color:#939ea8 ;
+    border-radius: 8px;
+    display: flex;
+/* direção do flex */
+flex-direction: row;
+/* eixo principal horizontal*/
+justify-content: space-evenly;
+/* eixo secundario vertical */
+align-items: center;
+
+
+}
+#menu a{
+    color: white;
+}
+#container{
+    height: 50vh;
+    border: solid 2px black;
+    display:flex ;
+    justify-content: center;
+    align-items: center;
+    
+}
+.motos{
+    border: solid 1px black;
+    height: 80%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.carro img{
+    width: 367px;
+    height: 300px;
+}
+.carro{
+    border: solid 1px black;
+    height: 70%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #949494;
+}
