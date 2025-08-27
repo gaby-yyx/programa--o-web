@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantina Cantina</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Header styles */
+        header {
+            height: 15vh;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0d0d0d;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header #logo {
+            height: 90%;
+            width: auto;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        header #logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        header nav {
+            width: 40%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        header nav a {
+            text-decoration: none;
+            font-size: 1.4rem;
+            color: #ffffff;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        header nav a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #e2a00c;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        header nav a:hover {
+            color: #e2a00c;
+        }
+
+        header nav a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        /* New styles for Club Button */
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Space between buttons */
+        }
+        
+        .club-button {
+            background-color: #ff5722; /* A warm, inviting color */
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+        }
+        
+        .club-button:hover {
+            background-color: #e64a19;
+            transform: scale(1.05);
+        }
+        
+        /* Cart button */
+        #cart-button {
+            background-color: #e2a00c;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        #cart-button:hover {
+            transform: scale(1.1);
+        }
+
+        #cart-counter {
+            background-color: #ff0000;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #2b2b2b;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s ease-out;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #e2a00c;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+            padding: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e2a00c;
+            text-align: right;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover, .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        
+        .modal-buttons button, #card-form button {
+            background-color: #e2a00c;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-buttons button:hover, #card-form button:hover {
+            background-color: #f7b731;
+            transform: translateY(-2px);
+        }
+        
+        #card-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        #card-form input {
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: #333;
+            color: white;
+            font-size: 1rem;
+        }
+
+        #card-form input::placeholder {
+            color: #888;
+        }
+        
+        #pix-info {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #pix-info img {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            border: 5px solid #e2a00c;
+        }
+        
+        /* Main content styles */
+        main {
+            padding: 50px 5%;
+        }
+        
+        .produtos {
+            margin-bottom: 50px;
+        }
+
+        .produtos h2.section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #e2a00c;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .mais-pedidos-grid, .salgados, .doces, .bebidas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            justify-items: center;
+        }
+        
+        .mais-pedidos-item, .salg, .acucar, .liquido {
+            height: auto;
+            width: 100%;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #1f1f1f, #141414);
+            box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #2b2b2b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 1s ease-out;
+        }
+
+        .mais-pedidos-item:hover, .salg:hover, .acucar:hover, .liquido:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 12px 12px 24px #0a0a0a, -12px -12px 24px #303030;
+        }
+
+        .mais-pedidos-item h2, .salg h2, .acucar h2, .liquido h2 {
+            font-size: 1.8rem;
+            color: #f7b731;
+        }
+
+        .foto {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            border: 3px solid #e2a00c;
+            transition: transform 0.3s ease;
+        }
+
+        .mais-pedidos-item .foto, .salgados .salg .foto, .doces .acucar .foto {
+            object-fit: cover;
+        }
+        
+        .bebidas .liquido .foto {
+            object-fit: contain;
+        }
+
+        .foto:hover {
+            transform: scale(1.02);
+        }
+
+        .comprar-btn {
+            background-color: #e2a00c;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 25px;
+            width: 150px;
+            height: 45px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .comprar-btn:hover {
+            background-color: #f7b731;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #0d0d0d;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+
+        /* JavaScript animations */
+        .hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img id="logo" src="https://media-cdn.tripadvisor.com/media/photo-s/13/36/14/e3/la-cantina-steak-house.jpg" alt="Cantina Logo">
+        <nav>
+            <a href="#mais-pedidos">Mais Pedidos</a>
+            <a href="#salgados">Salgados</a>
+            <a href="#doces">Doces</a>
+            <a href="#bebidas">Bebidas</a>
+        </nav>
+        <div class="header-buttons">
+            <a href="cantina.html" class="club-button">⭐ Clube da Cantina</a>
+            <button id="cart-button">
+                🛒
+                <span id="cart-counter">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div id="mais-pedidos" class="produtos">
+            <h2 class="section-title">Os Mais Pedidos</h2>
+            <div class="mais-pedidos-grid">
+                <div class="mais-pedidos-item hidden" data-name="Poke" data-price="30.00">
+                    <h2>Poke</h2>
+                    <img class="foto" src="https://ogimg.infoglobo.com.br/rioshow/24896593-8ef-2b7/FT1086A/760/poke-alimento-prato-comida.jpg" alt="Poke">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 30,00</h4>
+                </div>
+                <div class="mais-pedidos-item hidden" data-name="Coxinha de costela" data-price="10.00">
+                    <h2>Coxinha de costela</h2>
+                    <img class="foto" src="https://www.comidaereceitas.com.br/wp-content/uploads/2023/05/Coxinha-Costela-TABASCO%C2%AE-3-Mario-Rodrigues.jpg" alt="Coxinha de costela">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 10,00</h4>
+                </div>
+                <div class="mais-pedidos-item hidden" data-name="Croissant de chocolate" data-price="7.50">
+                    <h2>Croissant de chocolate</h2>
+                    <img class="foto" src="https://guiadacozinha.com.br/wp-content/uploads/2012/01/croissant-de-chocolate.jpg" alt="Croissant de chocolate">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 7,50</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="salgados" class="produtos">
+            <h2 class="section-title">Nossos Salgados</h2>
+            <div class="salgados">
+                <div class="salg hidden" data-name="Coxinha" data-price="8.00">
+                    <h2>Coxinha</h2>
+                    <img class="foto" src="https://swiftbr.vteximg.com.br/arquivos/ids/208897-768-768/617666-coxinha-de-frango-mandioca-pre-frita_rec.jpg?v=638875872661630000" alt="Coxinha">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 8,00</h4>
+                </div>
+                <div class="salg hidden" data-name="Calzone" data-price="9.00">
+                    <h2>Calzone</h2>
+                    <img class="foto" src="https://www.lamamma.com.br/wp-content/uploads/2017/10/CALZONE-1.jpg" alt="Calzone">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 9,00</h4>
+                </div>
+                <div class="salg hidden" data-name="Pão de queijo" data-price="6.50">
+                    <h2>Pão de queijo</h2>
+                    <img class="foto" src="https://guiadacozinha.com.br/wp-content/uploads/2019/10/pao-de-queijo-recheado-com-frango.jpg" alt="Pão de queijo">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 6,50</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="doces" class="produtos">
+            <h2 class="section-title">Nossos Doces</h2>
+            <div class="doces">
+                <div class="acucar hidden" data-name="Bolo de pote" data-price="10.00">
+                    <h2>Bolo de pote</h2>
+                    <img class="foto" src="https://receitas123.com/wp-content/uploads/2023/05/bolo-de-pote-gourmet.png" alt="Bolo de pote">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 10,00</h4>
+                </div>
+                <div class="acucar hidden" data-name="Torta de limão" data-price="7.00">
+                    <h2>Torta de limão</h2>
+                    <img class="foto" src="https://sabores-new.s3.amazonaws.com/public/2024/11/torta-mid-limao.jpg" alt="Torta de limão">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 7,00 (pedaço)</h4>
+                </div>
+                <div class="acucar hidden" data-name="Trufa" data-price="5.50">
+                    <h2>Trufa</h2>
+                    <img class="foto" src="https://www.comidaereceitas.com.br/wp-content/uploads/2018/02/Bolas-de-trufas-de-chocolate-780x520.jpg" alt="Trufa">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 5,50</h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="bebidas" class="produtos">
+            <h2 class="section-title">Nossas Bebidas</h2>
+            <div class="bebidas">
+                <div class="liquido hidden" data-name="Coca-cola Zero" data-price="4.50">
+                    <h2>Coca-cola Zero</h2>
+                    <img class="foto" src="https://http2.mlstatic.com/D_NQ_NP_712192-MLB81085600871_122024-O.webp" alt="Coca-cola zero">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 4,50</h4>
+                </div>
+                <div class="liquido hidden" data-name="Fanta Uva" data-price="3.50">
+                    <h2>Fanta Uva</h2>
+                    <img class="foto" src="https://phygital-files.mercafacil.com/porecatu/uploads/produto/refrigerante_fanta_350ml_lt_uva_e26bf46c-7015-4ca2-8e97-2638aa9f340b.png" alt="Fanta-uva">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 3,50</h4>
+                </div>
+                <div class="liquido hidden" data-name="Fanta Laranja" data-price="3.50">
+                    <h2>Fanta Laranja</h2>
+                    <img class="foto" src="https://superprix.vteximg.com.br/arquivos/ids/219138-600-600/547689_1.jpg?v=638343620134970000" alt="Fanta-laranja">
+                    <button class="comprar-btn">comprar</button>
+                    <h4>R$ 3,50</h4>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <h3>Todos os direitos reservados - Cantina Cantina</h3>
+    </footer>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Meu Carrinho 🛒</h3>
+            <div id="cart-items-list"></div>
+            <div class="cart-total">
+                Total: <span id="cart-total-value">R$ 0,00</span>
+            </div>
+            <div class="modal-buttons">
+                <button id="checkout-btn">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="delivery-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Como você gostaria de receber?</h3>
+            <div class="modal-buttons">
+                <button id="delivery-btn">🛵 Entrega</button>
+                <button id="pickup-btn">🚶 Retirada</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Selecione a forma de pagamento</h3>
+            <div class="modal-buttons">
+                <button id="pix-btn">PIX</button>
+                <button id="card-btn">Cartão</button>
+                <button id="cash-btn">Dinheiro</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="card-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Dados do Cartão</h3>
+            <form id="card-form">
+                <input type="text" id="card-name" placeholder="Nome impresso no cartão" required>
+                <input type="text" id="card-number" placeholder="Número do cartão" required>
+                <input type="text" id="card-expiry" placeholder="MM/AA" required>
+                <input type="text" id="card-cvv" placeholder="CVV" required>
+                <button type="submit">Confirmar Pagamento</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="pix-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Pagar com PIX</h3>
+            <div id="pix-info">
+                <p>Escaneie o QR Code abaixo para pagar:</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ExemploDeChavePix" alt="QR Code PIX">
+                <p>Total: <span id="pix-total-value">R$ 0,00</span></p>
+                <button id="pix-done-btn">Já paguei!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('header nav a');
+            const products = document.querySelectorAll('.mais-pedidos-item, .salg, .acucar, .liquido');
+            const cartButton = document.getElementById('cart-button');
+            const cartCounter = document.getElementById('cart-counter');
+            const cartModal = document.getElementById('cart-modal');
+            const deliveryModal = document.getElementById('delivery-modal');
+            const paymentModal = document.getElementById('payment-modal');
+            const cardModal = document.getElementById('card-modal');
+            const pixModal = document.getElementById('pix-modal');
+            const closeButtons = document.querySelectorAll('.close-button');
+            const cartItemsList = document.getElementById('cart-items-list');
+            const cartTotalValue = document.getElementById('cart-total-value');
+            const pixTotalValue = document.getElementById('pix-total-value');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const deliveryBtn = document.getElementById('delivery-btn');
+            const pickupBtn = document.getElementById('pickup-btn');
+            const pixBtn = document.getElementById('pix-btn');
+            const cardBtn = document.getElementById('card-btn');
+            const cashBtn = document.getElementById('cash-btn');
+            const cardForm = document.getElementById('card-form');
+            const pixDoneBtn = document.getElementById('pix-done-btn');
+            
+            let cart = [];
+
+            // Smooth scrolling
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetSection = document.querySelector(targetId);
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        entry.target.classList.remove('hidden');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            products.forEach(product => {
+                product.classList.add('hidden');
+                observer.observe(product);
+            });
+            
+            // Add to cart functionality
+            document.querySelectorAll('.comprar-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productElement = e.target.closest('.mais-pedidos-item, .salg, .acucar, .liquido');
+                    const productName = productElement.dataset.name;
+                    const productPrice = parseFloat(productElement.dataset.price);
+
+                    const existingItem = cart.find(item => item.name === productName);
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        cart.push({ name: productName, price: productPrice, quantity: 1 });
+                    }
+                    
+                    updateCartDisplay();
+                });
+            });
+
+            function updateCartDisplay() {
+                cartCounter.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartItemsList.innerHTML = '';
+                let total = 0;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <span>${item.name} (${item.quantity}x)</span>
+                        <span>R$ ${itemTotal.toFixed(2).replace('.', ',')}</span>
+                    `;
+                    cartItemsList.appendChild(itemDiv);
+                });
+
+                cartTotalValue.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                pixTotalValue.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            }
+
+            // Modal logic
+            function openModal(modal) {
+                modal.style.display = 'flex';
+            }
+
+            function closeModal(modal) {
+                modal.style.display = 'none';
+            }
+
+            // Open/Close cart modal
+            cartButton.addEventListener('click', () => {
+                if (cart.length > 0) {
+                    openModal(cartModal);
+                } else {
+                    alert('Seu carrinho está vazio!');
+                }
+            });
+            
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    closeModal(modal);
+                });
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    closeModal(e.target);
+                }
+            });
+
+            // Checkout process
+            checkoutBtn.addEventListener('click', () => {
+                closeModal(cartModal);
+                openModal(deliveryModal);
+            });
+
+            deliveryBtn.addEventListener('click', () => {
+                closeModal(deliveryModal);
+                alert("Você escolheu Entrega. O valor da taxa de entrega será adicionado no final.");
+                openModal(paymentModal);
+            });
+
+            pickupBtn.addEventListener('click', () => {
+                closeModal(deliveryModal);
+                alert("Você escolheu Retirada. Seu pedido estará pronto em breve!");
+                openModal(paymentModal);
+            });
+            
+            // Payment method selection
+            pixBtn.addEventListener('click', () => {
+                closeModal(paymentModal);
+                openModal(pixModal);
+            });
+            
+            cardBtn.addEventListener('click', () => {
+                closeModal(paymentModal);
+                openModal(cardModal);
+            });
+
+            cashBtn.addEventListener('click', () => {
+                closeModal(paymentModal);
+                alert(`Você finalizou seu pedido! Pagamento em dinheiro na entrega. Agradecemos a sua compra!`);
+                cart = [];
+                updateCartDisplay();
+            });
+            
+            // Finalizing payment
+            cardForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                closeModal(cardModal);
+                alert(`Pagamento com Cartão realizado com sucesso! Seu pedido está a caminho. Agradecemos a sua compra!`);
+                cardForm.reset(); // Reset form fields
+                cart = [];
+                updateCartDisplay();
+            });
+
+            pixDoneBtn.addEventListener('click', () => {
+                closeModal(pixModal);
+                alert(`Pagamento com PIX confirmado! Seu pedido está a caminho. Agradecemos a sua compra!`);
+                cart = [];
+                updateCartDisplay();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clube da Cantina</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            line-height: 1.6;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Header styles */
+        header {
+            height: 15vh;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0d0d0d;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header #logo {
+            height: 90%;
+            width: auto;
+            border-radius: 50%;
+        }
+        
+        header nav a {
+            text-decoration: none;
+            font-size: 1.4rem;
+            color: #ffffff;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #e2a00c;
+        }
+        
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .home-button {
+            background-color: #e2a00c;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .home-button:hover {
+            background-color: #f7b731;
+            transform: scale(1.05);
+        }
+
+        /* Main content styles */
+        main {
+            padding: 50px 5%;
+            text-align: center;
+        }
+        
+        .club-section {
+            background: linear-gradient(145deg, #2b2b2b, #1f1f1f);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin: 0 auto;
+            transition: transform 0.5s ease;
+        }
+
+        .club-section h1 {
+            font-size: 3rem;
+            color: #e2a00c;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .club-section p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+        
+        .benefits-list {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .benefits-list h3 {
+            font-size: 1.8rem;
+            color: #ff5722;
+            margin-bottom: 15px;
+        }
+        
+        .benefits-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .benefits-list li {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .benefits-list li:before {
+            content: "✅";
+            margin-right: 10px;
+        }
+        
+        .join-button {
+            background-color: #e2a00c;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .join-button:hover {
+            background-color: #f7b731;
+            transform: translateY(-2px);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #2b2b2b;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s ease-out;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #e2a00c;
+        }
+        
+        .modal-content p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover, .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        #register-form input {
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: #333;
+            color: white;
+            font-size: 1rem;
+        }
+
+        #register-form input::placeholder {
+            color: #888;
+        }
+        
+        #register-form button {
+            background-color: #e2a00c;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #register-form button:hover {
+            background-color: #f7b731;
+            transform: translateY(-2px);
+        }
+
+        /* Member page styles */
+        #member-area {
+            display: none; /* Initially hidden */
+            padding: 40px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #2b2b2b, #1f1f1f);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        #member-area h2 {
+            font-size: 2.5rem;
+            color: #ff5722;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        #member-area p {
+            font-size: 1.1rem;
+            color: #ccc;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Points bar styles */
+        .points-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .points-container h4 {
+            font-size: 1.5rem;
+            color: #e2a00c;
+            margin-bottom: 10px;
+        }
+        
+        .points-bar-wrapper {
+            background-color: #333;
+            border-radius: 15px;
+            height: 30px;
+            width: 100%;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .points-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #e2a00c, #f7b731);
+            border-radius: 15px;
+            transition: width 1s ease-in-out;
+        }
+
+        .points-label {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #0d0d0d;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            white-space: nowrap; /* Evita quebra de linha */
+            transition: color 0.3s ease;
+        }
+        
+        /* Ajuste de cor do texto quando a barra está preenchida o suficiente */
+        .points-bar-wrapper.filled .points-label {
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .points-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .points-info span {
+            color: #e2a00c;
+            font-weight: bold;
+        }
+
+        /* Recent purchases section */
+        .recent-purchases {
+            margin-top: 40px;
+        }
+        
+        .recent-purchases h4 {
+            font-size: 1.5rem;
+            color: #e2a00c;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .purchase-item {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .purchase-item span {
+            font-size: 1.1rem;
+        }
+        
+        .purchase-item .points-earned {
+            color: #f7b731;
+            font-weight: bold;
+        }
+        
+        /* Footer styles */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #0d0d0d;
+            border-top: 1px solid #333;
+            color: #888;
+            margin-top: 50px;
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img id="logo" src="https://media-cdn.tripadvisor.com/media/photo-s/13/36/14/e3/la-cantina-steak-house.jpg" alt="Cantina Logo">
+        <div class="header-buttons">
+            <a href="index.html" class="home-button">🏠 Voltar para o Início</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="join-club-section" class="club-section">
+            <h1>⭐ Clube da Cantina ⭐</h1>
+            <p>Junte-se ao nosso clube exclusivo e desfrute de vantagens e descontos incríveis!</p>
+            
+            <div class="benefits-list">
+                <h3>Vantagens para Membros:</h3>
+                <ul>
+                    <li>Receba **descontos exclusivos** em todos os produtos.</li>
+                    <li>Ganhe **pontos de fidelidade** a cada compra.</li>
+                    <li>Acesso a **promoções secretas** e ofertas especiais.</li>
+                    <li>Participe de **eventos e sorteios** para membros.</li>
+                </ul>
+            </div>
+            
+            <button class="join-button" id="join-club-btn">Quero Entrar para o Clube!</button>
+        </section>
+
+        <section id="member-area" class="club-section">
+            <h2 id="member-name-display"></h2>
+            <p>Você é um membro valioso do Clube da Cantina!</p>
+            
+            <div class="points-container">
+                <h4>Seus Pontos de Fidelidade</h4>
+                <div class="points-bar-wrapper">
+                    <div id="points-bar" class="points-bar"></div>
+                    <span id="points-label" class="points-label">0/1000 pontos</span>
+                </div>
+                <div class="points-info">
+                    <span>Nível Bronze</span>
+                    <span>Próximo nível: <span id="next-level">Prata (1000 pontos)</span></span>
+                </div>
+            </div>
+
+            <div class="recent-purchases">
+                <h4>Últimas Compras</h4>
+                </div>
+        </section>
+    </main>
+
+    <footer>
+        <h3>Todos os direitos reservados - Cantina Cantina</h3>
+    </footer>
+
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Junte-se ao Clube!</h3>
+            <p>Cadastre-se para começar a acumular **pontos e descontos** exclusivos!</p>
+            <form id="register-form">
+                <input type="text" id="name" placeholder="Nome Completo" required>
+                <input type="email" id="email" placeholder="E-mail" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const joinSection = document.getElementById('join-club-section');
+            const joinButton = document.getElementById('join-club-btn');
+            const registerModal = document.getElementById('register-modal');
+            const closeButton = registerModal.querySelector('.close-button');
+            const registerForm = document.getElementById('register-form');
+            const memberArea = document.getElementById('member-area');
+            const memberNameDisplay = document.getElementById('member-name-display');
+            const pointsBarWrapper = document.querySelector('.points-bar-wrapper');
+            const pointsBar = document.getElementById('points-bar');
+            const pointsLabel = document.getElementById('points-label');
+            const nextLevelSpan = document.getElementById('next-level');
+
+            // Initial points
+            let currentPoints = 0;
+            const pointsToNextLevel = 1000;
+
+            // Function to open the modal
+            joinButton.addEventListener('click', () => {
+                registerModal.style.display = 'flex';
+            });
+
+            // Function to close the modal
+            closeButton.addEventListener('click', () => {
+                registerModal.style.display = 'none';
+            });
+
+            // Close modal if user clicks outside
+            window.addEventListener('click', (e) => {
+                if (e.target === registerModal) {
+                    registerModal.style.display = 'none';
+                }
+            });
+
+            // Registration form submission logic
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+
+                // Simulate registration success
+                alert(`Olá, ${name}! Seja bem-vindo(a) ao Clube da Cantina!`);
+
+                // Update the page to show member's area
+                joinSection.style.display = 'none';
+                memberArea.style.display = 'block';
+                memberNameDisplay.textContent = `Olá, ${name}!`;
+                
+                // Close the modal and reset form
+                registerModal.style.display = 'none';
+                registerForm.reset();
+
+                // Simulating a purchase after registration
+                updatePoints(250); // Example: add 250 points from a purchase
+            });
+
+            // Function to update points
+            function updatePoints(pointsEarned) {
+                currentPoints += pointsEarned;
+                if (currentPoints > pointsToNextLevel) {
+                    currentPoints = pointsToNextLevel; // Cap at max points for visual effect
+                }
+                const percentage = (currentPoints / pointsToNextLevel) * 100;
+                
+                pointsBar.style.width = `${percentage}%`;
+                pointsLabel.textContent = `${currentPoints}/${pointsToNextLevel} pontos`;
+                
+                // Add a class to change label color if bar is filled enough
+                if (percentage > 50) {
+                    pointsBarWrapper.classList.add('filled');
+                } else {
+                    pointsBarWrapper.classList.remove('filled');
+                }
+
+                // Change next level display if needed (future implementation)
+                if (currentPoints >= pointsToNextLevel) {
+                    nextLevelSpan.textContent = 'Parabéns! Você alcançou o Nível Prata!';
+                    alert('Parabéns! Você alcançou o Nível Prata! Novos descontos desbloqueados!');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
